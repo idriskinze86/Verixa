@@ -21,7 +21,7 @@ export default function RegisterButton({ hash }: RegisterButtonProps) {
       address: VERIXA_REGISTRY,
       abi: VERIXA_ABI,
       functionName: "register",
-      args: [`0x${hash} as 0x${string}`],
+      args: [`0x${hash}` as `0x${string}`],
     });
   }
 
