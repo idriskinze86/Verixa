@@ -1,0 +1,95 @@
+===== GIT STATUS =====
+On branch develop
+Your branch is up to date with 'origin/develop'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   app/layout.tsx
+	modified:   app/page.tsx
+	modified:   components/Hero.tsx
+	modified:   components/Navbar.tsx
+	modified:   package-lock.json
+	modified:   package.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.agents/
+	.claude/
+	artifacts/
+	cache/
+	components/Logo.tsx
+	components/RegisterButton.tsx
+	components/UploadCard.tsx
+	components/WalletButton.tsx
+	contracts/
+	hardhat.config.ts
+	ignition/
+	lib/
+	providers/
+	scripts/
+	summary.txt
+	test/
+	types/
+	verixa_report.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+===== LAST 10 COMMITS =====
+33525f8 Redesign landing page with reusable components
+3c94ca4 Create Verixa landing page hero
+bc1c553 Resolve merge conflicts
+51bd155 Initial commit from Create Next App
+bd75bb1 Initial commit
+
+===== CHANGED FILES =====
+app/layout.tsx
+app/page.tsx
+components/Hero.tsx
+components/Navbar.tsx
+package-lock.json
+package.json
+
+===== UNTRACKED FILES =====
+.agents/skills/hardhat-toolbox-mocha-ethers/SKILL.md
+.agents/skills/hardhat/SKILL.md
+.claude/skills/hardhat-toolbox-mocha-ethers/SKILL.md
+.claude/skills/hardhat/SKILL.md
+artifacts/artifacts.d.ts
+artifacts/build-info/solc-0_8_28-a0e62e9c0a91da413825435e77fda4da706b6dc2.json
+artifacts/build-info/solc-0_8_28-a0e62e9c0a91da413825435e77fda4da706b6dc2.output.json
+artifacts/contracts/Counter.sol/Counter.json
+artifacts/contracts/Counter.sol/artifacts.d.ts
+artifacts/contracts/Counter.t.sol/CounterTest.json
+artifacts/contracts/VerixaRegistry.sol/VerixaRegistry.json
+artifacts/contracts/VerixaRegistry.sol/artifacts.d.ts
+cache/compile-cache.json
+components/Logo.tsx
+components/RegisterButton.tsx
+components/UploadCard.tsx
+components/WalletButton.tsx
+contracts/Counter.sol
+contracts/Counter.t.sol
+contracts/VerixaRegistry.sol
+hardhat.config.ts
+ignition/modules/Counter.ts
+lib/config.ts
+lib/contracts.ts
+providers/Web3Provider.tsx
+scripts/deploy.ts
+scripts/send-op-tx.ts
+summary.txt
+test/Counter.ts
+types/ethers-contracts/Counter.ts
+types/ethers-contracts/VerixaRegistry.ts
+types/ethers-contracts/common.ts
+types/ethers-contracts/factories/Counter__factory.ts
+types/ethers-contracts/factories/VerixaRegistry__factory.ts
+types/ethers-contracts/factories/index.ts
+types/ethers-contracts/hardhat.d.ts
+types/ethers-contracts/index.ts
+verixa_report.txt
+
+===== REMOTES =====
+origin	https://github.com/idriskinze86/Verixa.git (fetch)
+origin	https://github.com/idriskinze86/Verixa.git (push)

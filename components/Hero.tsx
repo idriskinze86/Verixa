@@ -1,3 +1,4 @@
+import Logo from "./Logo";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -25,18 +26,18 @@ export default function Hero() {
           </h2>
 
           <p className="mt-8 text-lg leading-8 text-gray-400">
-            Register and verify digital assets on the Flare blockchain with
-            immutable proof of ownership, authenticity, and integrity.
+            Protect documents, certificates, media, and digital assets with
+            tamper-proof blockchain verification powered by the Flare Network.
           </p>
 
           {/* Buttons */}
           <div className="mt-10 flex flex-wrap gap-4">
             <button className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 font-semibold transition hover:scale-105">
-              Launch App
+              🚀 Start Verifying
             </button>
 
             <button className="rounded-xl border border-gray-700 px-8 py-4 transition hover:border-purple-500">
-              Documentation
+              📄 View Docs
             </button>
           </div>
 
@@ -80,15 +81,37 @@ export default function Hero() {
         </div>
 
         {/* Right Side */}
-        <div className="flex h-[420px] w-[420px] items-center justify-center rounded-full border border-purple-500/20 bg-white/5 backdrop-blur-xl">
-          <div className="text-center">
-            <div className="text-7xl animate-pulse">🔷</div>
+        <div className="relative flex h-[480px] w-[480px] items-center justify-center">
+          {/* Outer Glow */}
+          <div className="absolute h-[420px] w-[420px] rounded-full bg-purple-600/10 blur-3xl" />
 
-            <h3 className="mt-6 text-2xl font-bold">Blockchain Verification</h3>
+          {/* Orb */}
+          <div className="relative flex h-[340px] w-[340px] items-center justify-center rounded-full border border-purple-500/20 bg-white/5 backdrop-blur-xl shadow-2xl shadow-purple-600/20">
+            <div className="absolute inset-6 rounded-full border border-white/10" />
 
-            <p className="mt-3 text-gray-400">
-              Immutable. Transparent. Secure.
-            </p>
+            <div className="flex flex-col items-center text-center">
+              <div className="animate-pulse">
+                <Logo />
+              </div>
+
+              <h3 className="mt-8 text-3xl font-bold">
+                Blockchain Verification
+              </h3>
+
+              <p className="mt-4 max-w-xs text-gray-400">
+                Every digital asset receives an immutable fingerprint secured on
+                the Flare blockchain.
+              </p>
+            </div>
+          </div>
+
+          {/* Floating Status Cards */}
+          <div className="absolute left-0 top-16 rounded-xl border border-green-500/20 bg-black/70 px-4 py-3 backdrop-blur">
+            <p className="text-sm text-green-400">✓ Verified</p>
+          </div>
+
+          <div className="absolute right-0 bottom-16 rounded-xl border border-purple-500/20 bg-black/70 px-4 py-3 backdrop-blur">
+            <p className="text-sm text-purple-300">SHA-256 Protected</p>
           </div>
         </div>
       </div>

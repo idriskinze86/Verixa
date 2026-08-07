@@ -1,3 +1,5 @@
+import Logo from "./Logo";
+import WalletButton from "./WalletButton";
 export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
@@ -30,9 +32,7 @@ export default function Navbar() {
         </div>
 
         {/* Wallet Button */}
-        <button className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-3 font-semibold transition hover:scale-105">
-          Connect Wallet
-        </button>
+        <WalletButton />
       </div>
     </nav>
   );
