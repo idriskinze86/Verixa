@@ -2,7 +2,7 @@
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { VERIXA_ABI, VERIXA_REGISTRY } from "@/lib/contracts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type RegisterButtonProps = {
   hash: string;
@@ -13,9 +13,15 @@ export default function RegisterButton({
   hash,
   fileName,
 }: RegisterButtonProps) {
+  const [showDuplicate, setShowDuplicate] = useState(false);
+
   const { writeContract, data: txHash, isPending, error } = useWriteContract();
 
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+  const {
+    isLoading: isConfirming,
+    isSuccess,
+    isError: isTransactionError,
+  } = useWaitForTransactionReceipt({
     hash: txHash,
   });
 
@@ -36,10 +42,20 @@ export default function RegisterButton({
       "verixa-registrations",
       JSON.stringify(registrations.slice(0, 5)),
     );
+
+    window.dispatchEvent(new Event("verixa-registration-added"));
   }, [isSuccess, hash, fileName]);
+
+  useEffect(() => {
+    if (isTransactionError) {
+      setShowDuplicate(true);
+    }
+  }, [isTransactionError]);
 
   function handleRegister() {
     if (!hash) return;
+
+    setShowDuplicate(false);
 
     writeContract({
       address: VERIXA_REGISTRY,
@@ -82,7 +98,29 @@ export default function RegisterButton({
         </div>
       )}
 
-      {error && <p className="mt-4 text-red-400">{error.message}</p>}
+      {showDuplicate && (
+        <div className="mt-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
+          <p className="font-semibold text-yellow-400">⚠️ Already Registered</p>
+
+          <p className="mt-2 text-sm text-gray-300">
+            This file has already been registered on the Flare blockchain.
+          </p>
+
+          <p className="mt-2 text-sm text-gray-400">
+            Try verifying the file instead.
+          </p>
+        </div>
+      )}
+
+      {error && !showDuplicate && (
+        <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-4">
+          <p className="font-semibold text-red-400">❌ Registration failed</p>
+
+          <p className="mt-2 break-words text-sm text-gray-300">
+            {error.message}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

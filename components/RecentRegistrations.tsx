@@ -12,11 +12,29 @@ export default function RecentRegistrations() {
   const [items, setItems] = useState<Registration[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("verixa-registrations");
+    function loadRegistrations() {
+      const saved = localStorage.getItem("verixa-registrations");
 
-    if (!saved) return;
+      if (!saved) {
+        setItems([]);
+        return;
+      }
 
-    setItems(JSON.parse(saved));
+      setItems(JSON.parse(saved));
+    }
+
+    // Load registrations when the component first appears
+    loadRegistrations();
+
+    // Listen for new registrations
+    window.addEventListener("verixa-registration-added", loadRegistrations);
+
+    return () => {
+      window.removeEventListener(
+        "verixa-registration-added",
+        loadRegistrations,
+      );
+    };
   }, []);
 
   if (items.length === 0) return null;
