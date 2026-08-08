@@ -106,9 +106,18 @@ export default function RegisterButton({
             This file has already been registered on the Flare blockchain.
           </p>
 
-          <p className="mt-2 text-sm text-gray-400">
-            Try verifying the file instead.
-          </p>
+          <button
+            onClick={() => {
+              window.dispatchEvent(
+                new CustomEvent("verixa-verify-hash", {
+                  detail: hash,
+                }),
+              );
+            }}
+            className="mt-4 rounded-lg border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
+          >
+            🔍 Verify This File
+          </button>
         </div>
       )}
 

@@ -1,11 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useReadContract } from "wagmi";
 import { VERIXA_ABI, VERIXA_REGISTRY } from "@/lib/contracts";
 
 export default function VerifyCard() {
   const [hash, setHash] = useState("");
+
+  useEffect(() => {
+    function handleVerifyHash(event: Event) {
+      const customEvent = event as CustomEvent<string>;
+
+      if (!customEvent.detail) return;
+
+      setHash(customEvent.detail);
+
+      setTimeout(() => {
+        document.getElementById("verify-document")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+
+    window.addEventListener("verixa-verify-hash", handleVerifyHash);
+
+    return () => {
+      window.removeEventListener("verixa-verify-hash", handleVerifyHash);
+    };
+  }, []);
 
   const { data, isLoading } = useReadContract({
     address: VERIXA_REGISTRY,
@@ -21,7 +44,7 @@ export default function VerifyCard() {
   const result = data as readonly [boolean, `0x${string}`, bigint] | undefined;
 
   return (
-    <section className="mx-auto my-24 max-w-5xl px-6">
+    <section id="verify-document" className="mx-auto my-24 max-w-5xl px-6">
       <div className="rounded-3xl border border-purple-500/20 bg-white/5 p-8 backdrop-blur-xl">
         <h2 className="text-4xl font-bold">Verify Document</h2>
 
@@ -40,7 +63,7 @@ export default function VerifyCard() {
           <p className="mt-6 text-gray-400">Checking blockchain...</p>
         )}
 
-        {result && (
+        {result && hash.length === 64 && (
           <div className="mt-8 rounded-xl border border-purple-500/20 bg-black/30 p-6">
             {result[0] ? (
               <>
