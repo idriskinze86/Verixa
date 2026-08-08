@@ -2,17 +2,41 @@
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { VERIXA_ABI, VERIXA_REGISTRY } from "@/lib/contracts";
+import { useEffect } from "react";
 
 type RegisterButtonProps = {
   hash: string;
+  fileName: string;
 };
 
-export default function RegisterButton({ hash }: RegisterButtonProps) {
+export default function RegisterButton({
+  hash,
+  fileName,
+}: RegisterButtonProps) {
   const { writeContract, data: txHash, isPending, error } = useWriteContract();
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: txHash,
   });
+
+  useEffect(() => {
+    if (!isSuccess || !hash) return;
+
+    const registrations = JSON.parse(
+      localStorage.getItem("verixa-registrations") || "[]",
+    );
+
+    registrations.unshift({
+      fileName: fileName || "Uploaded File",
+      hash,
+      timestamp: Date.now(),
+    });
+
+    localStorage.setItem(
+      "verixa-registrations",
+      JSON.stringify(registrations.slice(0, 5)),
+    );
+  }, [isSuccess, hash, fileName]);
 
   function handleRegister() {
     if (!hash) return;

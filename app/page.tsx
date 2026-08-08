@@ -5,6 +5,7 @@ import VerifyCard from "@/components/VerifyCard";
 import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
+import RecentRegistrations from "@/components/RecentRegistrations";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <UploadCard />
       <VerifyCard />
+      <RecentRegistrations />
       <Features />
       <HowItWorks />
       <Footer />
