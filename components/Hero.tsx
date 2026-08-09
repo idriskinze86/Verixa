@@ -11,8 +11,8 @@ export default function Hero() {
       <div className="mx-auto flex min-h-[85vh] max-w-7xl flex-col items-center justify-between gap-16 px-6 py-20 lg:flex-row">
         {/* Left Side */}
         <div className="max-w-xl">
-          <span className="rounded-full border border-purple-500 px-4 py-2 text-sm text-purple-300">
-            Built on Flare Network
+          <span className="inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-300">
+            ⚡ Built on Flare Network
           </span>
 
           <h1 className="mt-8 text-6xl font-black leading-tight md:text-7xl">
@@ -25,20 +25,27 @@ export default function Hero() {
             Trust Everything.
           </h2>
 
-          <p className="mt-8 text-lg leading-8 text-gray-400">
+          <p className="mt-8 max-w-lg text-lg leading-8 text-gray-400">
             Protect documents, certificates, media, and digital assets with
-            tamper-proof blockchain verification powered by the Flare Network.
+            tamper-proof blockchain verification. Verixa creates a unique
+            SHA-256 fingerprint and anchors it securely on Flare.
           </p>
 
           {/* Buttons */}
           <div className="mt-10 flex flex-wrap gap-4">
-            <button className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 font-semibold transition hover:scale-105">
+            <a
+              href="#upload"
+              className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 font-semibold transition hover:scale-105"
+            >
               🚀 Start Verifying
-            </button>
+            </a>
 
-            <button className="rounded-xl border border-gray-700 px-8 py-4 transition hover:border-purple-500">
+            <a
+              href="#how"
+              className="rounded-xl border border-gray-700 px-8 py-4 transition hover:border-purple-500"
+            >
               📄 View Docs
-            </button>
+            </a>
           </div>
 
           {/* Platform Highlights */}

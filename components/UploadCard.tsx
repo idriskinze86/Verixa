@@ -60,7 +60,7 @@ export default function UploadCard() {
     await processFile(file);
   }
   return (
-    <section className="mx-auto my-24 max-w-5xl px-6">
+    <section id="upload" className="mx-auto my-24 max-w-5xl px-6">
       <div className="rounded-3xl border border-purple-500/20 bg-white/5 p-8 backdrop-blur-xl">
         <h2 className="text-4xl font-bold">Upload & Verify</h2>
 
