@@ -86,10 +86,10 @@ export default function UploadCard() {
               : "border-purple-500/30 hover:border-purple-400"
           }`}
         >
-          <div className="flex justify-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/20 bg-purple-500/10">
             <UploadCloud
-              className={`h-16 w-16 transition-all duration-300 ${
-                isDragging ? "text-purple-300 scale-110" : "text-purple-400"
+              className={`h-9 w-9 transition-all duration-300 ${
+                isDragging ? "scale-110 text-purple-300" : "text-purple-400"
               }`}
             />
           </div>
@@ -109,8 +109,9 @@ export default function UploadCard() {
 
           <button
             onClick={() => inputRef.current?.click()}
-            className="mt-8 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 font-semibold transition hover:scale-105"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 font-semibold transition hover:scale-105"
           >
+            <UploadCloud className="h-5 w-5" />
             Choose File
           </button>
 
