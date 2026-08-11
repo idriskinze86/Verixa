@@ -8,8 +8,6 @@ export default function WalletButton() {
   const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
 
-  // Diagnostic: show the real Wagmi connection error in the browser console
-
   // Wallet is connecting/reconnecting
   if (
     connection.status === "connecting" ||
@@ -53,7 +51,6 @@ export default function WalletButton() {
   // Browser wallet
   const handleInjected = async () => {
     if (!injectedConnector) {
-      console.error("Browser wallet connector not found");
       return;
     }
 
@@ -69,7 +66,6 @@ export default function WalletButton() {
   // WalletConnect / mobile wallet
   const handleWalletConnect = async () => {
     if (!walletConnectConnector) {
-      console.error("WalletConnect connector not found");
       return;
     }
 
@@ -81,11 +77,10 @@ export default function WalletButton() {
       const walletError = error as {
         code?: number;
         name?: string;
-        message?: string;
       };
 
-      // User closed/rejected the WalletConnect request.
-      // This is not a real application error.
+      // Closing or rejecting the WalletConnect modal is normal.
+      // Do not report it as an application error.
       if (
         walletError.code === 4001 ||
         walletError.name === "UserRejectedRequestError"
@@ -96,6 +91,7 @@ export default function WalletButton() {
       console.error("WalletConnect connection failed:", error);
     }
   };
+
   return (
     <div className="flex items-center gap-2">
       {injectedConnector && (
@@ -114,7 +110,7 @@ export default function WalletButton() {
           disabled={isPending}
           className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 font-semibold transition hover:scale-105 disabled:opacity-50"
         >
-          📱 Connect Wallet
+          {isPending ? "Connecting..." : "📱 Connect Wallet"}
         </button>
       )}
     </div>
