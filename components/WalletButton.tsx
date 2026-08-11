@@ -8,6 +8,25 @@ export default function WalletButton() {
   const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
 
+  // Diagnostic: show the real Wagmi connection error in the browser console
+
+  // Wallet is connecting/reconnecting
+  if (
+    connection.status === "connecting" ||
+    connection.status === "reconnecting" ||
+    isPending
+  ) {
+    return (
+      <button
+        disabled
+        className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 font-semibold opacity-70"
+      >
+        Connecting...
+      </button>
+    );
+  }
+
+  // Wallet is connected
   if (connection.status === "connected") {
     const address = connection.address!;
     const shortAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -22,17 +41,82 @@ export default function WalletButton() {
     );
   }
 
-  return (
-    <button
-      onClick={() =>
-        connect({
-          connector: connectors[0],
-        })
+  // Find available connectors
+  const injectedConnector = connectors.find(
+    (connector) => connector.id === "injected",
+  );
+
+  const walletConnectConnector = connectors.find(
+    (connector) => connector.id === "walletConnect",
+  );
+
+  // Browser wallet
+  const handleInjected = async () => {
+    if (!injectedConnector) {
+      console.error("Browser wallet connector not found");
+      return;
+    }
+
+    try {
+      await connect({
+        connector: injectedConnector,
+      });
+    } catch (error) {
+      console.error("Browser wallet connection failed:", error);
+    }
+  };
+
+  // WalletConnect / mobile wallet
+  const handleWalletConnect = async () => {
+    if (!walletConnectConnector) {
+      console.error("WalletConnect connector not found");
+      return;
+    }
+
+    try {
+      await connect({
+        connector: walletConnectConnector,
+      });
+    } catch (error: unknown) {
+      const walletError = error as {
+        code?: number;
+        name?: string;
+        message?: string;
+      };
+
+      // User closed/rejected the WalletConnect request.
+      // This is not a real application error.
+      if (
+        walletError.code === 4001 ||
+        walletError.name === "UserRejectedRequestError"
+      ) {
+        return;
       }
-      disabled={isPending}
-      className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-3 font-semibold transition hover:scale-105 disabled:opacity-50"
-    >
-      {isPending ? "Connecting..." : "Connect Wallet"}
-    </button>
+
+      console.error("WalletConnect connection failed:", error);
+    }
+  };
+  return (
+    <div className="flex items-center gap-2">
+      {injectedConnector && (
+        <button
+          onClick={handleInjected}
+          disabled={isPending}
+          className="rounded-xl border border-purple-500/30 px-4 py-3 font-semibold transition hover:bg-purple-600/20 disabled:opacity-50"
+        >
+          🦊 Browser Wallet
+        </button>
+      )}
+
+      {walletConnectConnector && (
+        <button
+          onClick={handleWalletConnect}
+          disabled={isPending}
+          className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 font-semibold transition hover:scale-105 disabled:opacity-50"
+        >
+          📱 Connect Wallet
+        </button>
+      )}
+    </div>
   );
 }
