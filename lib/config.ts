@@ -1,5 +1,5 @@
 import { http, createConfig } from "wagmi";
-import { injected, walletConnect } from "wagmi/connectors";
+import { injected } from "wagmi/connectors";
 import { defineChain } from "viem";
 
 export const flareCoston2 = defineChain({
@@ -29,22 +29,15 @@ const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!;
 const metadata = {
   name: "Verixa",
   description: "Blockchain-powered digital asset verification on Flare",
-  url: "https://puma-sandy-reusable.ngrok-free.dev",
-  icons: ["https://puma-sandy-reusable.ngrok-free.dev/favicon.ico"],
+  url: "https://verixa-lake.vercel.app",
+  icons: ["https://verixa-lake.vercel.app/favicon.ico"],
 };
-
 export const config = createConfig({
   chains: [flareCoston2],
 
   connectors: [
     injected({
       shimDisconnect: true,
-    }),
-
-    walletConnect({
-      projectId,
-      metadata,
-      showQrModal: true,
     }),
   ],
 

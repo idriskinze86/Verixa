@@ -1,14 +1,27 @@
 "use client";
 
-import { useConnection, useConnect, useConnectors, useDisconnect } from "wagmi";
+import {
+  useConnection,
+  useConnect,
+  useConnectors,
+  useDisconnect,
+  useSwitchChain,
+} from "wagmi";
+
+import { flareCoston2 } from "@/lib/config";
 
 export default function WalletButton() {
   const connection = useConnection();
   const connectors = useConnectors();
+
   const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
+  const { switchChain, isPending: isSwitching } = useSwitchChain();
 
-  // Wallet is connecting/reconnecting
+  const injectedConnector = connectors.find(
+    (connector) => connector.id === "injected",
+  );
+
   if (
     connection.status === "connecting" ||
     connection.status === "reconnecting" ||
@@ -24,33 +37,61 @@ export default function WalletButton() {
     );
   }
 
-  // Wallet is connected
   if (connection.status === "connected") {
-    const address = connection.address!;
+    const address = connection.address;
+
+    if (!address) {
+      return null;
+    }
+
     const shortAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
+
+    const onFlare = connection.chainId === flareCoston2.id;
+
+    if (!onFlare) {
+      const handleSwitchToFlare = async () => {
+        try {
+          await switchChain({
+            chainId: flareCoston2.id,
+          });
+        } catch (error) {
+          console.error("Failed to switch to Flare Coston2:", error);
+        }
+      };
+
+      return (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSwitchToFlare}
+            disabled={isSwitching}
+            className="rounded-xl bg-orange-600 px-5 py-3 font-semibold transition hover:bg-orange-700 disabled:opacity-50"
+          >
+            {isSwitching ? "Switching..." : "⚠️ Switch to Flare"}
+          </button>
+
+          <button
+            onClick={() => disconnect()}
+            className="rounded-xl border border-purple-500/30 px-4 py-3 font-semibold transition hover:bg-purple-600/20"
+          >
+            {shortAddress}
+          </button>
+        </div>
+      );
+    }
 
     return (
       <button
         onClick={() => disconnect()}
         className="rounded-xl bg-green-600 px-6 py-3 font-semibold transition hover:bg-green-700"
       >
-        🟢 {shortAddress}
+        🟢 Flare · {shortAddress}
       </button>
     );
   }
 
-  // Find available connectors
-  const injectedConnector = connectors.find(
-    (connector) => connector.id === "injected",
-  );
-
-  const walletConnectConnector = connectors.find(
-    (connector) => connector.id === "walletConnect",
-  );
-
-  // Browser wallet
-  const handleInjected = async () => {
+  const handleConnect = async () => {
     if (!injectedConnector) {
+      console.error("No browser wallet detected.");
       return;
     }
 
@@ -59,60 +100,17 @@ export default function WalletButton() {
         connector: injectedConnector,
       });
     } catch (error) {
-      console.error("Browser wallet connection failed:", error);
-    }
-  };
-
-  // WalletConnect / mobile wallet
-  const handleWalletConnect = async () => {
-    if (!walletConnectConnector) {
-      return;
-    }
-
-    try {
-      await connect({
-        connector: walletConnectConnector,
-      });
-    } catch (error: unknown) {
-      const walletError = error as {
-        code?: number;
-        name?: string;
-      };
-
-      // Closing or rejecting the WalletConnect modal is normal.
-      // Do not report it as an application error.
-      if (
-        walletError.code === 4001 ||
-        walletError.name === "UserRejectedRequestError"
-      ) {
-        return;
-      }
-
-      console.error("WalletConnect connection failed:", error);
+      console.error("Wallet connection failed:", error);
     }
   };
 
   return (
-    <div className="flex items-center gap-2">
-      {injectedConnector && (
-        <button
-          onClick={handleInjected}
-          disabled={isPending}
-          className="rounded-xl border border-purple-500/30 px-4 py-3 font-semibold transition hover:bg-purple-600/20 disabled:opacity-50"
-        >
-          🦊 Browser Wallet
-        </button>
-      )}
-
-      {walletConnectConnector && (
-        <button
-          onClick={handleWalletConnect}
-          disabled={isPending}
-          className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 font-semibold transition hover:scale-105 disabled:opacity-50"
-        >
-          {isPending ? "Connecting..." : "📱 Connect Wallet"}
-        </button>
-      )}
-    </div>
+    <button
+      onClick={handleConnect}
+      disabled={isPending || !injectedConnector}
+      className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 font-semibold transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {isPending ? "Connecting..." : "🔗 Connect Wallet"}
+    </button>
   );
 }
